@@ -3,584 +3,336 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Astra AI</title>
+  <title>Notes2Video AI</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
+    * { box-sizing: border-box; }
     body {
+      margin: 0;
       font-family: Arial, sans-serif;
-      background: #0b0b12;
-      color: #f5f5ff;
-      min-height: 100vh;
+      background: #0b0b14;
+      color: #fff;
     }
-
-    .app {
-      display: flex;
-      min-height: 100vh;
-    }
-
-    .sidebar {
-      width: 250px;
-      background: #12121d;
-      padding: 22px;
-      border-right: 1px solid #29293b;
-    }
-
-    .logo {
-      font-size: 25px;
-      font-weight: bold;
-      color: #b79aff;
-      margin-bottom: 25px;
-    }
-
-    button {
-      cursor: pointer;
-      border: 0;
-      border-radius: 10px;
-      padding: 12px 15px;
-      color: white;
-      background: #7955dc;
-      font-size: 14px;
-    }
-
-    button:hover {
-      background: #906ff0;
-    }
-
-    .new-chat {
-      width: 100%;
-      margin-bottom: 12px;
-    }
-
-    .side-btn {
-      width: 100%;
-      margin-top: 10px;
-      text-align: left;
-      background: #202033;
-    }
-
-    .main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      min-width: 0;
-    }
-
     header {
-      padding: 20px;
-      border-bottom: 1px solid #29293b;
-      font-size: 20px;
-      font-weight: bold;
-    }
-
-    .mode-bar {
+      padding: 20px 6%;
+      border-bottom: 1px solid #29293d;
       display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      padding: 15px 20px;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
     }
-
-    .mode-bar button {
-      background: #202033;
+    .logo {
+      font-size: 23px;
+      font-weight: 800;
+      color: #c6a5ff;
     }
-
-    .mode-bar button.active {
-      background: #7955dc;
-    }
-
-    #messages {
-      flex: 1;
-      padding: 22px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-    }
-
-    .welcome {
-      margin: auto;
+    .hero {
       text-align: center;
-      max-width: 600px;
-      padding: 25px;
+      padding: 48px 18px 25px;
     }
-
-    .welcome h1 {
-      font-size: clamp(30px, 5vw, 48px);
-      margin-bottom: 15px;
-      background: linear-gradient(90deg, #c6a8ff, #7ce6ff);
+    .hero h1 {
+      font-size: clamp(32px, 6vw, 58px);
+      margin: 15px 0;
+      background: linear-gradient(90deg, #c5a3ff, #70e3ff);
       -webkit-background-clip: text;
       color: transparent;
     }
-
-    .welcome p {
-      color: #aaaabd;
-      line-height: 1.7;
+    .hero p { color: #b8b8ca; line-height: 1.7; }
+    .badge {
+      display: inline-block;
+      border: 1px solid #514074;
+      padding: 8px 14px;
+      border-radius: 30px;
+      color: #d9c6ff;
     }
-
-    .message {
-      max-width: 850px;
-      width: 100%;
-      margin: 0 auto;
-      padding: 17px;
-      border-radius: 14px;
-      line-height: 1.7;
-      white-space: pre-wrap;
-      overflow-wrap: anywhere;
-    }
-
-    .user {
-      background: #29213e;
-    }
-
-    .assistant {
+    .panel {
+      width: min(900px, 92%);
+      margin: 20px auto 45px;
       background: #151522;
-      border: 1px solid #29293b;
+      border: 1px solid #303047;
+      padding: 24px;
+      border-radius: 22px;
     }
-
-    .message strong {
-      color: #c7adff;
+    label {
+      display: block;
+      margin: 18px 0 8px;
+      font-weight: bold;
     }
-
-    .composer {
-      padding: 16px;
-      border-top: 1px solid #29293b;
-      background: #0f0f18;
-    }
-
-    .input-wrap {
-      max-width: 900px;
-      margin: auto;
-      display: flex;
-      gap: 10px;
-      align-items: flex-end;
-      background: #1b1b29;
-      border: 1px solid #35354b;
-      border-radius: 16px;
-      padding: 10px;
-    }
-
-    textarea {
-      flex: 1;
-      resize: vertical;
-      min-height: 48px;
-      max-height: 180px;
-      background: transparent;
+    textarea, select, input[type="file"] {
+      width: 100%;
+      background: #0d0d17;
+      border: 1px solid #39394e;
       color: white;
-      border: 0;
-      outline: none;
-      padding: 13px;
-      font-size: 16px;
-      font-family: inherit;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 15px;
     }
-
-    .small-note {
-      color: #89899f;
-      font-size: 12px;
-      text-align: center;
-      margin-top: 10px;
-    }
-
-    .status {
-      text-align: center;
-      color: #b7a0ff;
-      padding: 8px;
-      font-size: 13px;
-    }
-
-    .plans {
-      padding: 25px;
-      max-width: 900px;
-      margin: auto;
-    }
-
-    .plans h2 {
-      margin-bottom: 18px;
-    }
-
-    .plan-grid {
+    textarea { min-height: 190px; resize: vertical; }
+    .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       gap: 15px;
     }
-
-    .plan {
-      padding: 20px;
-      background: #171725;
-      border: 1px solid #35354b;
-      border-radius: 15px;
+    button {
+      cursor: pointer;
+      border: 0;
+      border-radius: 12px;
+      padding: 14px 18px;
+      font-size: 15px;
+      font-weight: bold;
     }
-
-    .plan h3 {
-      color: #c7adff;
-      margin-bottom: 12px;
-    }
-
-    .plan p {
-      margin: 9px 0;
-      color: #c1c1d4;
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    .owner-box {
-      max-width: 450px;
-      margin: 35px auto;
-      padding: 25px;
-      background: #171725;
-      border: 1px solid #35354b;
-      border-radius: 15px;
-    }
-
-    .owner-box h2 {
-      margin-bottom: 18px;
-    }
-
-    .owner-box input {
-      width: 100%;
-      padding: 13px;
-      margin: 8px 0 14px;
-      background: #0f0f18;
+    .primary {
+      background: linear-gradient(90deg, #8455ed, #5c78ee);
       color: white;
-      border: 1px solid #44445b;
-      border-radius: 9px;
+      width: 100%;
+      margin-top: 22px;
     }
-
-    @media (max-width: 700px) {
-      .sidebar {
-        width: 78px;
-        padding: 12px 8px;
-      }
-
-      .logo {
-        font-size: 14px;
-        text-align: center;
-      }
-
-      .side-btn {
-        font-size: 11px;
-        padding: 10px 5px;
-        text-align: center;
-      }
-
-      .new-chat {
-        font-size: 11px;
-        padding: 10px 5px;
-      }
-
-      header {
-        padding: 16px;
-      }
-
-      #messages {
-        padding: 12px;
-      }
-
-      .input-wrap {
-        gap: 5px;
-      }
-
-      .input-wrap button {
-        padding: 11px 9px;
-      }
+    .secondary { background: #29293c; color: white; }
+    button:disabled { opacity: .55; cursor: wait; }
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      width: min(900px, 92%);
+      margin: 0 auto 35px;
+    }
+    .feature {
+      background: #151522;
+      border: 1px solid #303047;
+      border-radius: 16px;
+      padding: 18px;
+    }
+    .feature h3 { color: #c6a5ff; }
+    .feature p { color: #b8b8ca; line-height: 1.5; }
+    #status {
+      margin-top: 18px;
+      white-space: pre-wrap;
+      line-height: 1.6;
+      color: #d5c5ff;
+    }
+    #result { margin-top: 20px; }
+    video { width: 100%; border-radius: 14px; background: #000; }
+    .download {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 13px 18px;
+      background: #237b57;
+      color: white;
+      text-decoration: none;
+      border-radius: 10px;
+    }
+    footer {
+      text-align: center;
+      color: #88889e;
+      padding: 25px;
+      border-top: 1px solid #29293d;
     }
   </style>
 </head>
-
 <body>
-<div class="app">
+  <header>
+    <div class="logo">✦ Notes2Video AI</div>
+    <button class="secondary" onclick="newProject()">＋ नया वीडियो</button>
+  </header>
 
-  <aside class="sidebar">
-    <div class="logo">✦ Astra AI</div>
-    <button class="new-chat" id="newChat">＋ New Chat</button>
-    <button class="side-btn" id="chatNav">💬 AI Chat</button>
-    <button class="side-btn" id="astroNav">🔮 Astrology</button>
-    <button class="side-btn" id="plansNav">💎 Plans</button>
-    <button class="side-btn" id="ownerNav">⚙️ Owner</button>
-  </aside>
+  <section class="hero">
+    <span class="badge">✦ AI-Powered Learning Studio</span>
+    <h1>Notes से Video बनाओ!</h1>
+    <p>
+      अपने नोट्स डालो और उन्हें हिंदी आवाज़, दृश्यों
+      और subtitles वाले सीखने के वीडियो में बदलो।
+    </p>
+  </section>
 
-  <main class="main">
-    <header id="pageTitle">Astra AI — Your AI Assistant</header>
-
-    <div class="mode-bar" id="modeBar">
-      <button class="active" data-mode="general">General AI</button>
-      <button data-mode="study">Study Help</button>
-      <button data-mode="coding">Coding</button>
-      <button data-mode="creative">Creative</button>
+  <section class="features">
+    <div class="feature">
+      <h3>🎙️ हिंदी AI Voice</h3>
+      <p>नोट्स को बोलकर समझाने के लिए आवाज़।</p>
     </div>
+    <div class="feature">
+      <h3>🎬 Animated Scenes</h3>
+      <p>समझने में मदद करने वाले दृश्य और शीर्षक।</p>
+    </div>
+    <div class="feature">
+      <h3>📝 Subtitles</h3>
+      <p>वीडियो के साथ पढ़ने योग्य टेक्स्ट।</p>
+    </div>
+    <div class="feature">
+      <h3>📥 MP4 Download</h3>
+      <p>तैयार वीडियो को डिवाइस में सेव करने का विकल्प।</p>
+    </div>
+  </section>
 
-    <section id="chatPage" style="flex:1;display:flex;flex-direction:column;min-height:0">
-      <div id="messages">
-        <div class="welcome" id="welcome">
-          <h1>Hello, Welcome to Astra AI</h1>
-          <p>अपना सवाल लिखो। पढ़ाई, कोडिंग, लिखने और नए विचारों में AI से मदद लो।</p>
+  <main class="panel">
+    <h2>🎥 अपना Learning Video बनाओ</h2>
+
+    <form id="videoForm">
+      <label for="notes">अपने नोट्स यहाँ लिखो</label>
+      <textarea id="notes"
+        placeholder="उदाहरण: प्रकाश संश्लेषण वह प्रक्रिया है जिसमें पौधे सूर्य के प्रकाश की मदद से अपना भोजन बनाते हैं..."
+        required maxlength="20000"></textarea>
+
+      <label for="file">या TXT नोट्स फ़ाइल चुनो</label>
+      <input id="file" type="file" accept=".txt,text/plain">
+
+      <div class="grid">
+        <div>
+          <label for="language">वीडियो की भाषा</label>
+          <select id="language">
+            <option value="hi">हिंदी</option>
+            <option value="en">English</option>
+            <option value="hinglish">Hinglish</option>
+          </select>
+        </div>
+        <div>
+          <label for="duration">वीडियो की अवधि</label>
+          <select id="duration">
+            <option value="1">1 मिनट</option>
+            <option value="3">3 मिनट</option>
+            <option value="5" selected>5 मिनट</option>
+            <option value="10">10 मिनट</option>
+            <option value="15">15 मिनट</option>
+          </select>
+        </div>
+        <div>
+          <label for="voice">आवाज़</label>
+          <select id="voice">
+            <option value="female">महिला आवाज़</option>
+            <option value="male">पुरुष आवाज़</option>
+          </select>
+        </div>
+        <div>
+          <label for="style">वीडियो स्टाइल</label>
+          <select id="style">
+            <option value="educational">शैक्षणिक</option>
+            <option value="animated">एनिमेटेड</option>
+            <option value="presentation">प्रेज़ेंटेशन</option>
+          </select>
         </div>
       </div>
-      <div class="status" id="status"></div>
 
-      <div class="composer">
-        <div class="input-wrap">
-          <textarea id="prompt" placeholder="Astra AI से कुछ भी पूछो..." rows="1"></textarea>
-          <button id="micBtn" title="Voice input">🎙️</button>
-          <button id="sendBtn">Send ➤</button>
-        </div>
-        <div class="small-note">
-          AI के जवाब गलत हो सकते हैं। ज़रूरी जानकारी जाँच लें।
-        </div>
-      </div>
-    </section>
+      <button class="primary" id="createBtn" type="submit">
+        ✨ वीडियो बनाओ
+      </button>
+    </form>
 
-    <section id="plansPage" class="plans hidden">
-      <h2>💎 Astra AI Plans</h2>
-      <p style="color:#aaaabd;margin-bottom:20px">
-        ये केवल उदाहरण के लिए प्लान हैं। अभी ऑनलाइन पेमेंट सक्रिय नहीं है।
-      </p>
-      <div class="plan-grid">
-        <div class="plan">
-          <h3>Free</h3>
-          <p>₹0</p>
-          <p>बेसिक AI चैट</p>
-          <p>सीमित उपयोग</p>
-        </div>
-        <div class="plan">
-          <h3>Starter</h3>
-          <p>₹99</p>
-          <p>अधिक AI उपयोग</p>
-          <p>बेसिक सुविधाएँ</p>
-        </div>
-        <div class="plan">
-          <h3>Pro</h3>
-          <p>₹299</p>
-          <p>उन्नत उपयोग</p>
-          <p>प्राथमिकता सुविधाएँ</p>
-        </div>
-        <div class="plan">
-          <h3>Premium</h3>
-          <p>₹599</p>
-          <p>प्रीमियम प्लान</p>
-          <p>पेमेंट इंटीग्रेशन अभी नहीं है</p>
-        </div>
-      </div>
-    </section>
+    <div id="status" role="status" aria-live="polite"></div>
 
-    <section id="ownerPage" class="hidden">
-      <div class="owner-box" id="ownerLoginBox">
-        <h2>🔐 Owner Login</h2>
-        <label for="ownerUsername">Username</label>
-        <input id="ownerUsername" value="owner" autocomplete="username">
-        <label for="ownerPassword">Password</label>
-        <input id="ownerPassword" type="password" placeholder="Owner password" autocomplete="current-password">
-        <button id="ownerLoginBtn">Login</button>
-        <p id="ownerError" style="margin-top:12px;color:#ff8585"></p>
-      </div>
-
-      <div class="owner-box hidden" id="ownerDashboard">
-        <h2>⚙️ Owner Dashboard</h2>
-        <p>Owner login successful.</p>
-        <p style="margin-top:12px;color:#aaaabd">
-          वास्तविक उपयोगकर्ता, कमाई और पेमेंट आँकड़ों के लिए सर्वर पर डेटाबेस और पेमेंट सिस्टम जोड़ना होगा।
-        </p>
-        <button id="ownerLogoutBtn" style="margin-top:18px">Logout</button>
-      </div>
-    </section>
+    <div id="result" hidden>
+      <h3>🎉 तुम्हारा वीडियो तैयार है</h3>
+      <video id="player" controls playsinline></video>
+      <a id="download" class="download" download="Notes2Video.mp4">
+        ⬇️ MP4 डाउनलोड करो
+      </a>
+    </div>
   </main>
-</div>
 
-<script>
-  const messagesEl = document.getElementById("messages");
-  const welcome = document.getElementById("welcome");
-  const promptEl = document.getElementById("prompt");
-  const sendBtn = document.getElementById("sendBtn");
-  const statusEl = document.getElementById("status");
+  <footer>
+    Notes2Video AI · Learn Better, Every Day
+  </footer>
 
-  let mode = "general";
-  let history = [];
-  let busy = false;
+  <script>
+    const form = document.getElementById("videoForm");
+    const notes = document.getElementById("notes");
+    const fileInput = document.getElementById("file");
+    const statusBox = document.getElementById("status");
+    const createBtn = document.getElementById("createBtn");
+    let currentVideoUrl = null;
 
-  function showPage(page) {
-    document.getElementById("chatPage").classList.toggle("hidden", page !== "chat");
-    document.getElementById("plansPage").classList.toggle("hidden", page !== "plans");
-    document.getElementById("ownerPage").classList.toggle("hidden", page !== "owner");
-    document.getElementById("modeBar").classList.toggle("hidden", page !== "chat");
+    fileInput.addEventListener("change", async () => {
+      const file = fileInput.files[0];
+      if (!file) return;
 
-    const titles = {
-      chat: "Astra AI — Your AI Assistant",
-      plans: "Astra AI — Plans",
-      owner: "Astra AI — Owner Panel"
-    };
+      if (file.size > 1024 * 1024) {
+        statusBox.textContent = "TXT फ़ाइल 1 MB से छोटी होनी चाहिए।";
+        fileInput.value = "";
+        return;
+      }
 
-    document.getElementById("pageTitle").textContent = titles[page];
-  }
-
-  function addMessage(role, text) {
-    welcome.classList.add("hidden");
-
-    const div = document.createElement("div");
-    div.className = "message " + (role === "user" ? "user" : "assistant");
-
-    // textContent keeps model output as text instead of executable HTML.
-    div.textContent = text;
-    messagesEl.appendChild(div);
-    messagesEl.scrollTop = messagesEl.scrollHeight;
-    return div;
-  }
-
-  function resetChat() {
-    history = [];
-    messagesEl.innerHTML = "";
-    messagesEl.appendChild(welcome);
-    welcome.classList.remove("hidden");
-    statusEl.textContent = "";
-    promptEl.value = "";
-    showPage("chat");
-  }
-
-  document.getElementById("newChat").addEventListener("click", resetChat);
-  document.getElementById("chatNav").addEventListener("click", () => showPage("chat"));
-  document.getElementById("astroNav").addEventListener("click", () => {
-    mode = "astrology";
-    document.querySelectorAll("[data-mode]").forEach(b => b.classList.remove("active"));
-    showPage("chat");
-    statusEl.textContent = "Astrology mode चुना गया है। इसे मनोरंजन के रूप में लें।";
-  });
-  document.getElementById("plansNav").addEventListener("click", () => showPage("plans"));
-  document.getElementById("ownerNav").addEventListener("click", () => showPage("owner"));
-
-  document.querySelectorAll("[data-mode]").forEach(button => {
-    button.addEventListener("click", () => {
-      mode = button.dataset.mode;
-      document.querySelectorAll("[data-mode]").forEach(b => b.classList.remove("active"));
-      button.classList.add("active");
-      statusEl.textContent = "";
+      try {
+        notes.value = await file.text();
+        statusBox.textContent = "नोट्स फ़ाइल लोड हो गई।";
+      } catch {
+        statusBox.textContent = "फ़ाइल पढ़ नहीं पाए। दूसरी TXT फ़ाइल चुनें।";
+      }
     });
-  });
 
-  async function sendMessage() {
-    const text = promptEl.value.trim();
-    if (!text || busy) return;
-
-    busy = true;
-    sendBtn.disabled = true;
-    statusEl.textContent = "Astra AI जवाब तैयार कर रहा है…";
-    promptEl.value = "";
-
-    history.push({ role: "user", content: text });
-    addMessage("user", text);
-
-    // The server accepts up to 30 messages.
-    const payloadMessages = history.slice(-29);
-
-    try {
-      const response = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          messages: payloadMessages,
-          mode: mode
-        })
-      });
-
-      const data = await response.json().catch(() => ({}));
-
-      if (!response.ok) {
-        throw new Error(data.error || "Server error (" + response.status + ")");
-      }
-
-      if (typeof data.answer !== "string") {
-        throw new Error("Server से सही जवाब नहीं मिला।");
-      }
-
-      history.push({ role: "assistant", content: data.answer });
-      addMessage("assistant", data.answer);
-      statusEl.textContent = "";
-    } catch (error) {
-      addMessage("assistant", "⚠️ " + error.message);
-      statusEl.textContent = "कनेक्शन या API सेटिंग जाँचें।";
-    } finally {
-      busy = false;
-      sendBtn.disabled = false;
-      promptEl.focus();
-    }
-  }
-
-  sendBtn.addEventListener("click", sendMessage);
-
-  promptEl.addEventListener("keydown", event => {
-    if (event.key === "Enter" && !event.shiftKey) {
+    form.addEventListener("submit", async event => {
       event.preventDefault();
-      sendMessage();
-    }
-  });
 
-  // Browser speech recognition availability varies by browser.
-  document.getElementById("micBtn").addEventListener("click", () => {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
-    if (!SpeechRecognition) {
-      statusEl.textContent = "इस ब्राउज़र में voice input उपलब्ध नहीं है। Chrome में कोशिश करें।";
-      return;
-    }
-
-    const recognition = new SpeechRecognition();
-    recognition.lang = "hi-IN";
-    recognition.interimResults = false;
-
-    recognition.onresult = event => {
-      promptEl.value += (promptEl.value ? " " : "") +
-        event.results[0][0].transcript;
-      promptEl.focus();
-    };
-
-    recognition.onerror = () => {
-      statusEl.textContent = "Voice input नहीं हो पाया। माइक्रोफोन अनुमति जाँचें।";
-    };
-
-    recognition.start();
-  });
-
-  document.getElementById("ownerLoginBtn").addEventListener("click", async () => {
-    const username = document.getElementById("ownerUsername").value.trim();
-    const password = document.getElementById("ownerPassword").value;
-    const errorEl = document.getElementById("ownerError");
-
-    errorEl.textContent = "";
-
-    try {
-      const response = await fetch("/api/owner/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password })
-      });
-
-      const data = await response.json().catch(() => ({}));
-
-      if (!response.ok || !data.ok) {
-        throw new Error(data.error || "Login असफल। Username और password जाँचें।");
+      const text = notes.value.trim();
+      if (!text) {
+        statusBox.textContent = "पहले अपने नोट्स लिखो।";
+        return;
       }
 
-      document.getElementById("ownerLoginBox").classList.add("hidden");
-      document.getElementById("ownerDashboard").classList.remove("hidden");
-    } catch (error) {
-      errorEl.textContent = error.message;
+      createBtn.disabled = true;
+      createBtn.textContent = "⏳ वीडियो तैयार हो रहा है...";
+      statusBox.textContent =
+        "तुम्हारी रिक्वेस्ट भेजी जा रही है। वीडियो बनने में कुछ समय लग सकता है।";
+      document.getElementById("result").hidden = true;
+
+      try {
+        const response = await fetch("/api/video", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            notes: text,
+            language: document.getElementById("language").value,
+            duration: Number(document.getElementById("duration").value),
+            voice: document.getElementById("voice").value,
+            style: document.getElementById("style").value
+          })
+        });
+
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+          throw new Error(data.error || "वीडियो जनरेशन असफल हुआ।");
+        }
+
+        if (!data.videoUrl) {
+          throw new Error(
+            "सर्वर ने वीडियो लिंक नहीं दिया। Backend सेटअप जाँचें।"
+          );
+        }
+
+        const videoResponse = await fetch(data.videoUrl);
+        if (!videoResponse.ok) {
+          throw new Error("वीडियो डाउनलोड नहीं हो पाया।");
+        }
+
+        const blob = await videoResponse.blob();
+
+        if (currentVideoUrl) URL.revokeObjectURL(currentVideoUrl);
+        currentVideoUrl = URL.createObjectURL(blob);
+
+        const player = document.getElementById("player");
+        const download = document.getElementById("download");
+
+        player.src = currentVideoUrl;
+        download.href = currentVideoUrl;
+
+        document.getElementById("result").hidden = false;
+        statusBox.textContent = "वीडियो तैयार है! अब उसे चलाओ या डाउनलोड करो।";
+      } catch (error) {
+        statusBox.textContent = "⚠️ " + error.message;
+      } finally {
+        createBtn.disabled = false;
+        createBtn.textContent = "✨ वीडियो बनाओ";
+      }
+    });
+
+    function newProject() {
+      form.reset();
+      statusBox.textContent = "";
+      document.getElementById("result").hidden = true;
+      if (currentVideoUrl) {
+        URL.revokeObjectURL(currentVideoUrl);
+        currentVideoUrl = null;
+      }
+      document.getElementById("player").removeAttribute("src");
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
-  });
-
-  document.getElementById("ownerLogoutBtn").addEventListener("click", async () => {
-    try {
-      await fetch("/api/owner/logout", { method: "POST" });
-    } catch (_) {}
-
-    document.getElementById("ownerDashboard").classList.add("hidden");
-    document.getElementById("ownerLoginBox").classList.remove("hidden");
-    document.getElementById("ownerPassword").value = "";
-  });
-
-  showPage("chat");
-</script>
+  </script>
 </body>
 </html>
