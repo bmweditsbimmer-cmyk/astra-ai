@@ -1,26 +1,314 @@
 
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Astra AI</title>
   <style>
+    * { box-sizing: border-box; }
     body {
+      margin: 0;
       font-family: Arial, sans-serif;
-      background: #101426;
-      color: white;
-      text-align: center;
-      padding: 50px 16px;
+      color: #f5f3ff;
+      background: #0b0b18;
     }
-    h1 { color: #9c8cff; }
-    p { color: #d5d8e8; }
+    header {
+      padding: 18px 24px;
+      background: #141329;
+      border-bottom: 1px solid #302950;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .logo { font-size: 25px; font-weight: bold; color: #c4b5fd; }
+    nav { display: flex; gap: 10px; flex-wrap: wrap; }
+    button {
+      cursor: pointer;
+      border: 1px solid #514477;
+      background: #211c3e;
+      color: white;
+      border-radius: 10px;
+      padding: 11px 15px;
+    }
+    button:hover { background: #6044b8; }
+    main { max-width: 950px; margin: auto; padding: 25px 16px; }
+    .hero {
+      padding: 35px 22px;
+      text-align: center;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #25204b, #171329);
+      border: 1px solid #493879;
+    }
+    h1 { font-size: clamp(30px, 6vw, 48px); margin: 10px 0; }
+    .purple { color: #c4b5fd; }
+    .panel {
+      margin-top: 22px;
+      padding: 22px;
+      border-radius: 16px;
+      background: #141329;
+      border: 1px solid #302950;
+    }
+    textarea, input {
+      width: 100%;
+      padding: 13px;
+      margin: 8px 0 12px;
+      border-radius: 10px;
+      border: 1px solid #514477;
+      background: #0b0b18;
+      color: white;
+      font: inherit;
+    }
+    textarea { min-height: 110px; resize: vertical; }
+    .primary { background: #7450d8; border: 0; }
+    .output {
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      line-height: 1.7;
+      margin-top: 15px;
+    }
+    .hidden { display: none; }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+    }
+    .price { font-size: 27px; font-weight: bold; color: #c4b5fd; }
+    .status { color: #c4b5fd; min-height: 24px; }
+    footer { text-align: center; padding: 25px; color: #a7a2bd; }
   </style>
 </head>
 <body>
-  <h1>✨ Astra AI</h1>
-  <p>Welcome to Astra AI!</p>
-  <p>Website successfully deployed.</p>
+<header>
+  <div class="logo">✨ Astra AI</div>
+  <nav>
+    <button onclick="showPage('home')">Home & Chat</button>
+    <button onclick="showPage('guide')">AI Guide</button>
+    <button onclick="showPage('plans')">Plans</button>
+    <button onclick="showPage('owner')">Owner Panel</button>
+  </nav>
+</header>
+
+<main>
+  <section id="home">
+    <div class="hero">
+      <div class="purple">YOUR SMART AI ASSISTANT</div>
+      <h1>Welcome to <span class="purple">Astra AI</span></h1>
+      <p>Ask questions, learn new things and explore ideas with AI.</p>
+      <button class="primary" onclick="document.getElementById('message').focus()">
+        Start Chatting 🚀
+      </button>
+    </div>
+
+    <div class="panel">
+      <h2>💬 Chat with Astra</h2>
+      <div id="chatOutput" class="output">Hello! Ask me anything.</div>
+      <label for="message">Your message</label>
+      <textarea id="message" placeholder="Type your question here..."></textarea>
+      <button class="primary" onclick="sendMessage()">Send Message ➤</button>
+      <button onclick="startVoice()">🎙️ Speak</button>
+      <button onclick="stopVoice()">Stop Voice</button>
+      <div id="chatStatus" class="status"></div>
+    </div>
+  </section>
+
+  <section id="guide" class="hidden">
+    <div class="panel">
+      <h2>📚 AI Guide</h2>
+      <p>Enter a topic and ask Astra AI to explain it in simple language.</p>
+      <input id="topic" placeholder="Example: Solar System">
+      <button class="primary" onclick="explainTopic()">Explain Topic</button>
+      <div id="guideOutput" class="output"></div>
+    </div>
+  </section>
+
+  <section id="plans" class="hidden">
+    <div class="hero">
+      <h1>Choose Your Plan</h1>
+      <p>Plans are displayed for information. Payment is not connected yet.</p>
+    </div>
+    <div class="cards">
+      <div class="panel">
+        <h2>Free</h2>
+        <p class="price">₹0</p>
+        <p>Try the website and explore its features.</p>
+      </div>
+      <div class="panel">
+        <h2>Weekly</h2>
+        <p class="price">₹100</p>
+        <p>Weekly access plan.</p>
+      </div>
+      <div class="panel">
+        <h2>Monthly</h2>
+        <p class="price">₹500</p>
+        <p>Monthly access plan.</p>
+      </div>
+      <div class="panel">
+        <h2>Yearly</h2>
+        <p class="price">₹1000</p>
+        <p>Yearly access plan.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="owner" class="hidden">
+    <div class="panel">
+      <h2>🔐 Owner Panel</h2>
+      <p>Owner login needs a secure backend setup.</p>
+      <input id="ownerUser" placeholder="Owner username">
+      <input id="ownerPass" type="password" placeholder="Owner password">
+      <button class="primary" onclick="ownerLogin()">Owner Login</button>
+      <div id="ownerStatus" class="status"></div>
+      <div id="ownerData" class="output"></div>
+    </div>
+  </section>
+</main>
+
+<footer>✨ Astra AI — Explore more with Artificial Intelligence</footer>
+
+<script>
+  function showPage(page) {
+    ["home", "guide", "plans", "owner"].forEach(id => {
+      document.getElementById(id).classList.toggle("hidden", id !== page);
+    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  async function sendMessage() {
+    const input = document.getElementById("message");
+    const output = document.getElementById("chatOutput");
+    const status = document.getElementById("chatStatus");
+    const message = input.value.trim();
+
+    if (!message) {
+      status.textContent = "Please enter a message.";
+      return;
+    }
+
+    output.textContent += "\n\nYou: " + message;
+    input.value = "";
+    status.textContent = "Astra is thinking...";
+
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Request failed");
+      }
+
+      const answer =
+        data.reply || data.response || data.message || data.answer;
+
+      if (!answer) {
+        throw new Error("The server did not return an AI answer.");
+      }
+
+      output.textContent += "\n\nAstra: " + answer;
+      status.textContent = "Response received.";
+      speakText(answer);
+    } catch (error) {
+      status.textContent = "Error: " + error.message;
+    }
+  }
+
+  async function explainTopic() {
+    const topic = document.getElementById("topic").value.trim();
+    if (!topic) {
+      document.getElementById("guideOutput").textContent =
+        "Please enter a topic.";
+      return;
+    }
+
+    document.getElementById("message").value =
+      "Explain this topic in simple Hindi with examples: " + topic;
+
+    showPage("home");
+    await sendMessage();
+  }
+
+  function speakText(text) {
+    if ("speechSynthesis" in window) {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = "hi-IN";
+      window.speechSynthesis.speak(utterance);
+    }
+  }
+
+  function startVoice() {
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+      document.getElementById("chatStatus").textContent =
+        "Voice input is not supported in this browser.";
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = "hi-IN";
+    recognition.onresult = event => {
+      document.getElementById("message").value =
+        event.results[0][0].transcript;
+    };
+    recognition.onerror = () => {
+      document.getElementById("chatStatus").textContent =
+        "Could not recognize speech. Please try again.";
+    };
+    recognition.start();
+  }
+
+  function stopVoice() {
+    if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+  }
+
+  async function ownerLogin() {
+    const status = document.getElementById("ownerStatus");
+    const dataBox = document.getElementById("ownerData");
+
+    status.textContent = "Checking login...";
+    dataBox.textContent = "";
+
+    try {
+      const response = await fetch("/api/owner/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: document.getElementById("ownerUser").value,
+          password: document.getElementById("ownerPass").value
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Login failed");
+      }
+
+      status.textContent = "Login request successful.";
+      dataBox.textContent = JSON.stringify(data, null, 2);
+    } catch (error) {
+      status.textContent = "Error: " + error.message;
+    }
+  }
+
+  document.getElementById("message").addEventListener("keydown", event => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      sendMessage();
+    }
+  });
+</script>
 </body>
 </html>
+
+
 
